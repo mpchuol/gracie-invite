@@ -613,7 +613,7 @@
         <span class="question">will you go out with me tomorrow?</span>
       </h1>
 
-      <p class="lede">I’ve got a little plan, and I’d love to spend the day with you.</p>
+      <p class="lede">I’ve got a little plan, and I’d love to spend the morning with you.</p>
 
       <div class="details">
         <div class="detail">
@@ -634,7 +634,7 @@
             </svg>
           </span>
           <span class="label">Time</span>
-          <strong id="timeText">6:00 PM</strong>
+          <strong id="timeText">9:00 AM – 12:00 PM</strong>
         </div>
         <div class="detail">
           <span class="detail-icon">
@@ -644,7 +644,7 @@
             </svg>
           </span>
           <span class="label">Plan</span>
-          <strong id="planText">Dinner &amp; something sweet</strong>
+          <strong id="planText">Morning date &amp; something sweet</strong>
         </div>
       </div>
 
@@ -670,8 +670,8 @@
 
       <div class="ticket">
         <div class="ticket-row"><span>Date</span><strong id="successDate">Saturday, October 31</strong></div>
-        <div class="ticket-row"><span>Time</span><strong id="successTime">6:00 PM</strong></div>
-        <div class="ticket-row"><span>Plan</span><strong id="successPlan">Dinner &amp; something sweet</strong></div>
+        <div class="ticket-row"><span>Time</span><strong id="successTime">9:00 AM – 12:00 PM</strong></div>
+        <div class="ticket-row"><span>Plan</span><strong id="successPlan">Morning date &amp; something sweet</strong></div>
       </div>
 
       <button class="calendar" id="calendarBtn" type="button">
@@ -690,8 +690,9 @@
     const CONFIG = {
       name: "Gracie",
       date: "2026-10-31",
-      time: "18:00",
-      plan: "Dinner & something sweet",
+      startTime: "09:00",
+      endTime: "12:00",
+      plan: "Morning date & something sweet",
       location: "I’ll pick you up",
       note: "Wear something you feel amazing in. I’ll handle the rest."
     };
@@ -704,16 +705,20 @@
     const calendarBtn = document.getElementById("calendarBtn");
 
     const eventDate = new Date(CONFIG.date + "T12:00:00");
-    const [hours, minutes] = CONFIG.time.split(":").map(Number);
+    const [startHours, startMinutes] = CONFIG.startTime.split(":").map(Number);
+    const [endHours, endMinutes] = CONFIG.endTime.split(":").map(Number);
     const dateLabel = new Intl.DateTimeFormat(undefined, {
       weekday: "long",
       month: "long",
       day: "numeric"
     }).format(eventDate);
-    const timeLabel = new Intl.DateTimeFormat(undefined, {
-      hour: "numeric",
-      minute: "2-digit"
-    }).format(new Date(2000, 0, 1, hours, minutes));
+    const formatTime = function (hour, minute) {
+      return new Intl.DateTimeFormat(undefined, {
+        hour: "numeric",
+        minute: "2-digit"
+      }).format(new Date(2000, 0, 1, hour, minute));
+    };
+    const timeLabel = formatTime(startHours, startMinutes) + " – " + formatTime(endHours, endMinutes);
 
     document.getElementById("nameText").textContent = CONFIG.name + ",";
     document.getElementById("successName").textContent = CONFIG.name;
@@ -837,8 +842,9 @@
 
     calendarBtn.addEventListener("click", function () {
       const start = new Date(CONFIG.date + "T00:00:00");
-      start.setHours(hours, minutes, 0, 0);
-      const end = new Date(start.getTime() + 2 * 60 * 60 * 1000);
+      start.setHours(startHours, startMinutes, 0, 0);
+      const end = new Date(CONFIG.date + "T00:00:00");
+      end.setHours(endHours, endMinutes, 0, 0);
       const lines = [
         "BEGIN:VCALENDAR",
         "VERSION:2.0",
