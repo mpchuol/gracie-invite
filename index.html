@@ -220,7 +220,7 @@
 
     .details {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 10px;
       margin-top: 30px;
       padding: 10px;
@@ -389,6 +389,14 @@
     .success .lede {
       max-width: 38ch;
       margin: 18px auto 0;
+    }
+
+    .thank-you {
+      margin: 18px 0 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.35rem;
+      font-style: italic;
+      color: var(--rose-dark);
     }
 
     .ticket {
@@ -646,6 +654,15 @@
           <span class="label">Plan</span>
           <strong id="planText">Morning date &amp; something sweet</strong>
         </div>
+        <div class="detail">
+          <span class="detail-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M9 4l3 2 3-2 4 2-1.5 4L15 9v11H9V9l-2.5 1L5 6l4-2z"></path>
+            </svg>
+          </span>
+          <span class="label">Dress code</span>
+          <strong id="dressCodeText">White</strong>
+        </div>
       </div>
 
       <div class="actions">
@@ -667,11 +684,13 @@
       <p class="eyebrow">It’s official</p>
       <h2>It’s a date, <span id="successName">Gracie</span>.</h2>
       <p class="lede">You just made my whole week. I’m already looking forward to it.</p>
+      <p class="thank-you">Thank you, My Grace.</p>
 
       <div class="ticket">
         <div class="ticket-row"><span>Date</span><strong id="successDate">Saturday, October 31</strong></div>
         <div class="ticket-row"><span>Time</span><strong id="successTime">9:00 AM – 12:00 PM</strong></div>
         <div class="ticket-row"><span>Plan</span><strong id="successPlan">Morning date &amp; something sweet</strong></div>
+        <div class="ticket-row"><span>Dress code</span><strong id="successDressCode">White</strong></div>
       </div>
 
       <button class="calendar" id="calendarBtn" type="button">
@@ -693,6 +712,7 @@
       startTime: "09:00",
       endTime: "12:00",
       plan: "Morning date & something sweet",
+      dressCode: "White",
       location: "I’ll pick you up",
       note: "Wear something you feel amazing in. I’ll handle the rest."
     };
@@ -725,9 +745,11 @@
     document.getElementById("dateText").textContent = dateLabel;
     document.getElementById("timeText").textContent = timeLabel;
     document.getElementById("planText").textContent = CONFIG.plan;
+    document.getElementById("dressCodeText").textContent = CONFIG.dressCode;
     document.getElementById("successDate").textContent = dateLabel;
     document.getElementById("successTime").textContent = timeLabel;
     document.getElementById("successPlan").textContent = CONFIG.plan;
+    document.getElementById("successDressCode").textContent = CONFIG.dressCode;
     document.getElementById("successNote").textContent = CONFIG.note;
 
     const heartMarkup = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
@@ -857,7 +879,7 @@
         "DTSTART:" + toIcsDate(start),
         "DTEND:" + toIcsDate(end),
         "SUMMARY:" + escapeIcs("Date with " + CONFIG.name),
-        "DESCRIPTION:" + escapeIcs(CONFIG.plan + ". " + CONFIG.note),
+        "DESCRIPTION:" + escapeIcs(CONFIG.plan + ". Dress code: " + CONFIG.dressCode + ". " + CONFIG.note),
         "LOCATION:" + escapeIcs(CONFIG.location),
         "END:VEVENT",
         "END:VCALENDAR"
