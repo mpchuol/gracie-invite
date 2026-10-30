@@ -282,7 +282,8 @@
 
     .yes,
     .no,
-    .calendar {
+    .calendar,
+    .whatsapp {
       border: 0;
       border-radius: 999px;
       cursor: pointer;
@@ -427,22 +428,40 @@
       text-align: right;
     }
 
-    .calendar {
+    .success-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .calendar,
+    .whatsapp {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 9px;
       min-height: 52px;
-      margin-top: 22px;
       padding: 0 23px;
       color: #fff;
-      background: var(--ink);
-      box-shadow: 0 12px 24px rgba(53, 20, 38, 0.2);
       font-size: 0.92rem;
       font-weight: 800;
+      text-decoration: none;
     }
 
-    .calendar svg {
+    .calendar {
+      background: var(--ink);
+      box-shadow: 0 12px 24px rgba(53, 20, 38, 0.2);
+    }
+
+    .whatsapp {
+      background: linear-gradient(135deg, #23a55a, #0f7a48);
+      box-shadow: 0 12px 24px rgba(15, 122, 72, 0.24);
+    }
+
+    .calendar svg,
+    .whatsapp svg {
       width: 17px;
       height: 17px;
       fill: none;
@@ -455,6 +474,11 @@
     .calendar:hover {
       transform: translateY(-2px);
       background: #4b1d35;
+    }
+
+    .whatsapp:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(135deg, #2bbf68, #128c53);
     }
 
     .success .hint {
@@ -583,6 +607,15 @@
       .ticket-row {
         font-size: 0.88rem;
       }
+
+      .success-actions {
+        flex-direction: column;
+      }
+
+      .success-actions .calendar,
+      .success-actions .whatsapp {
+        width: 100%;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -693,13 +726,22 @@
         <div class="ticket-row"><span>Dress code</span><strong id="successDressCode">White</strong></div>
       </div>
 
-      <button class="calendar" id="calendarBtn" type="button">
-        Add to calendar
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <rect x="3" y="4" width="18" height="18" rx="2"></rect>
-          <path d="M16 2v4M8 2v4M3 10h18"></path>
-        </svg>
-      </button>
+      <div class="success-actions">
+        <a class="whatsapp" id="whatsappBtn" href="#" target="_blank" rel="noopener">
+          Send my answer on WhatsApp
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20 11.5a8.5 8.5 0 0 1-12.6 7.4L3 20l1.2-4.2A8.5 8.5 0 1 1 20 11.5z"></path>
+            <path d="M8.5 9.5c.2 2.8 2.2 4.8 5 5l1.2-1.2 2 .9c-.2 1.2-1.1 2-2.3 2-3.8 0-7.4-3.6-7.4-7.4 0-1.2.8-2.1 2-2.3l.9 2-1.4 1z"></path>
+          </svg>
+        </a>
+        <button class="calendar" id="calendarBtn" type="button">
+          Add to calendar
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+            <path d="M16 2v4M8 2v4M3 10h18"></path>
+          </svg>
+        </button>
+      </div>
 
       <p class="hint" id="successNote">Wear something you feel amazing in. I’ll handle the rest.</p>
     </section>
@@ -713,6 +755,7 @@
       endTime: "12:00",
       plan: "Morning date & something sweet",
       dressCode: "White",
+      whatsapp: "254716235986",
       location: "I’ll pick you up",
       note: "Wear something you feel amazing in. I’ll handle the rest."
     };
@@ -723,6 +766,7 @@
     const noBtn = document.getElementById("noBtn");
     const hint = document.getElementById("hint");
     const calendarBtn = document.getElementById("calendarBtn");
+    const whatsappBtn = document.getElementById("whatsappBtn");
 
     const eventDate = new Date(CONFIG.date + "T12:00:00");
     const [startHours, startMinutes] = CONFIG.startTime.split(":").map(Number);
@@ -751,6 +795,9 @@
     document.getElementById("successPlan").textContent = CONFIG.plan;
     document.getElementById("successDressCode").textContent = CONFIG.dressCode;
     document.getElementById("successNote").textContent = CONFIG.note;
+
+    const whatsappMessage = "Yes, I’d love to go out with you tomorrow. Thank you, My Grace.";
+    whatsappBtn.href = "https://wa.me/" + CONFIG.whatsapp + "?text=" + encodeURIComponent(whatsappMessage);
 
     const heartMarkup = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
     const hearts = document.getElementById("hearts");
