@@ -1,0 +1,873 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#2b1025">
+  <title>A little question for Gracie</title>
+  <style>
+    :root {
+      --ink: #351426;
+      --muted: #805e6e;
+      --rose: #d93b70;
+      --rose-dark: #a62251;
+      --gold: #f0b35b;
+      --cream: #fff8f2;
+      --line: rgba(94, 31, 61, 0.13);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    html {
+      min-height: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      min-height: 100vh;
+      min-height: 100svh;
+      margin: 0;
+      padding: 28px;
+      display: grid;
+      place-items: center;
+      overflow-x: hidden;
+      overflow-y: auto;
+      position: relative;
+      color: var(--ink);
+      font-family: "Segoe UI", "Trebuchet MS", sans-serif;
+      background:
+        radial-gradient(circle at 14% 18%, rgba(255, 205, 218, 0.82), transparent 31%),
+        radial-gradient(circle at 88% 84%, rgba(255, 222, 169, 0.72), transparent 30%),
+        linear-gradient(135deg, #2b1025 0%, #5b2045 38%, #b4486c 69%, #ffd8cf 100%);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at center, transparent 35%, rgba(35, 8, 25, 0.26) 100%);
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .ambient {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(4px);
+      opacity: 0.5;
+      animation: breathe 9s ease-in-out infinite alternate;
+    }
+
+    .orb-one {
+      width: 220px;
+      height: 220px;
+      left: -70px;
+      top: 12%;
+      background: rgba(255, 170, 195, 0.36);
+    }
+
+    .orb-two {
+      width: 300px;
+      height: 300px;
+      right: -100px;
+      bottom: -80px;
+      background: rgba(255, 216, 166, 0.32);
+      animation-delay: -4s;
+    }
+
+    .orb-three {
+      width: 150px;
+      height: 150px;
+      right: 16%;
+      top: 7%;
+      background: rgba(255, 255, 255, 0.17);
+      animation-delay: -2s;
+    }
+
+    .heart-float {
+      position: absolute;
+      bottom: -50px;
+      width: var(--size);
+      height: var(--size);
+      opacity: var(--opacity);
+      animation: drift var(--duration) linear var(--delay) infinite;
+    }
+
+    .heart-float svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      fill: #fff;
+    }
+
+    .card {
+      width: min(680px, 100%);
+      position: relative;
+      isolation: isolate;
+      padding: 48px;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: 34px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(255, 219, 204, 0.78), transparent 34%),
+        linear-gradient(155deg, rgba(255, 251, 247, 0.97), rgba(255, 243, 237, 0.94));
+      box-shadow:
+        0 36px 90px rgba(32, 7, 22, 0.34),
+        0 10px 30px rgba(32, 7, 22, 0.16),
+        inset 0 1px 0 rgba(255, 255, 255, 0.92);
+      animation: card-in 0.85s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+      z-index: 1;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      width: 270px;
+      height: 270px;
+      right: -100px;
+      top: -120px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(217, 59, 112, 0.16), transparent 68%);
+      pointer-events: none;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      width: 190px;
+      height: 190px;
+      left: -90px;
+      bottom: -100px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(240, 179, 91, 0.16), transparent 68%);
+      pointer-events: none;
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0 0 20px;
+      color: var(--rose-dark);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+
+    h1,
+    h2 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 400;
+      letter-spacing: -0.04em;
+    }
+
+    h1 {
+      font-size: clamp(2.7rem, 7vw, 4.6rem);
+      line-height: 0.94;
+    }
+
+    h1 .name {
+      display: block;
+      color: var(--rose-dark);
+    }
+
+    h1 .question {
+      display: block;
+      margin-top: 12px;
+      font-size: 0.67em;
+      font-style: italic;
+      line-height: 1.02;
+      color: var(--ink);
+    }
+
+    .lede {
+      max-width: 49ch;
+      margin: 22px 0 0;
+      color: var(--muted);
+      font-size: 1.02rem;
+      line-height: 1.7;
+    }
+
+    .details {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 30px;
+      padding: 10px;
+      border: 1px solid rgba(166, 34, 81, 0.08);
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    .detail {
+      min-width: 0;
+      padding: 14px 14px 13px;
+      border-radius: 15px;
+      background: rgba(255, 248, 242, 0.78);
+    }
+
+    .detail-icon {
+      display: grid;
+      place-items: center;
+      width: 31px;
+      height: 31px;
+      margin-bottom: 11px;
+      border-radius: 50%;
+      color: var(--rose-dark);
+      background: rgba(217, 59, 112, 0.1);
+    }
+
+    .detail-icon svg {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .detail .label {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--muted);
+      font-size: 0.67rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .detail strong {
+      display: block;
+      font-size: 0.93rem;
+      line-height: 1.3;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .yes,
+    .no,
+    .calendar {
+      border: 0;
+      border-radius: 999px;
+      cursor: pointer;
+      transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease,
+        background 0.18s ease,
+        opacity 0.25s ease;
+    }
+
+    .yes {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 56px;
+      padding: 0 27px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--rose), var(--rose-dark));
+      box-shadow: 0 14px 28px rgba(166, 34, 81, 0.28);
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    .yes svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    .yes:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 34px rgba(166, 34, 81, 0.34);
+    }
+
+    .yes:active {
+      transform: translateY(0) scale(0.985);
+    }
+
+    .no {
+      min-height: 52px;
+      padding: 0 21px;
+      color: var(--muted);
+      background: transparent;
+      font-size: 0.92rem;
+      font-weight: 700;
+      touch-action: manipulation;
+      will-change: transform;
+    }
+
+    .no:hover {
+      background: rgba(166, 34, 81, 0.06);
+    }
+
+    .no.gone {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .hint {
+      min-height: 22px;
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+
+    .success {
+      text-align: center;
+      animation: success-in 0.65s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    }
+
+    .success .eyebrow {
+      margin-bottom: 14px;
+    }
+
+    .seal {
+      display: grid;
+      place-items: center;
+      width: 78px;
+      height: 78px;
+      margin: 0 auto 20px;
+      border-radius: 50%;
+      color: #fff;
+      background: linear-gradient(145deg, #ff759c, var(--rose-dark));
+      box-shadow:
+        0 18px 30px rgba(166, 34, 81, 0.3),
+        0 0 0 10px rgba(217, 59, 112, 0.08);
+      animation: seal-pulse 2.4s ease-in-out infinite;
+    }
+
+    .seal svg {
+      width: 34px;
+      height: 34px;
+      fill: currentColor;
+    }
+
+    h2 {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      line-height: 0.98;
+      color: var(--rose-dark);
+    }
+
+    .success .lede {
+      max-width: 38ch;
+      margin: 18px auto 0;
+    }
+
+    .ticket {
+      display: grid;
+      gap: 12px;
+      margin: 28px 0 0;
+      padding: 19px 21px;
+      border: 1px dashed rgba(166, 34, 81, 0.25);
+      border-radius: 19px;
+      background: rgba(255, 255, 255, 0.58);
+      text-align: left;
+    }
+
+    .ticket-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      font-size: 0.94rem;
+      line-height: 1.4;
+    }
+
+    .ticket-row span {
+      flex: 0 0 auto;
+      color: var(--muted);
+    }
+
+    .ticket-row strong {
+      text-align: right;
+    }
+
+    .calendar {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-height: 52px;
+      margin-top: 22px;
+      padding: 0 23px;
+      color: #fff;
+      background: var(--ink);
+      box-shadow: 0 12px 24px rgba(53, 20, 38, 0.2);
+      font-size: 0.92rem;
+      font-weight: 800;
+    }
+
+    .calendar svg {
+      width: 17px;
+      height: 17px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .calendar:hover {
+      transform: translateY(-2px);
+      background: #4b1d35;
+    }
+
+    .success .hint {
+      max-width: 34ch;
+      margin: 18px auto 0;
+    }
+
+    .confetti {
+      position: fixed;
+      top: -24px;
+      z-index: 20;
+      width: 7px;
+      height: 12px;
+      border-radius: 2px;
+      pointer-events: none;
+      animation: confetti-fall linear forwards;
+    }
+
+    :focus-visible {
+      outline: 3px solid rgba(240, 179, 91, 0.9);
+      outline-offset: 4px;
+    }
+
+    @keyframes card-in {
+      from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes success-in {
+      from {
+        opacity: 0;
+        transform: translateY(14px) scale(0.985);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes seal-pulse {
+      0%,
+      100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+    }
+
+    @keyframes breathe {
+      from {
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+      to {
+        transform: translate3d(16px, -12px, 0) scale(1.08);
+      }
+    }
+
+    @keyframes drift {
+      from {
+        transform: translate3d(0, 0, 0) rotate(-8deg);
+      }
+      to {
+        transform: translate3d(var(--drift), -118vh, 0) rotate(20deg);
+      }
+    }
+
+    @keyframes confetti-fall {
+      to {
+        transform: translate3d(var(--sway), 112vh, 0) rotate(var(--rotate));
+        opacity: 0.95;
+      }
+    }
+
+    @media (max-width: 620px) {
+      body {
+        padding: 16px;
+      }
+
+      .card {
+        padding: 34px 23px 30px;
+        border-radius: 28px;
+      }
+
+      .details {
+        grid-template-columns: 1fr;
+      }
+
+      .detail {
+        display: grid;
+        grid-template-columns: 34px 1fr;
+        column-gap: 12px;
+        align-items: center;
+        padding: 10px 12px;
+      }
+
+      .detail-icon {
+        grid-row: span 2;
+        margin: 0;
+      }
+
+      .detail .label {
+        margin: 0;
+      }
+
+      .actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .yes {
+        width: 100%;
+      }
+
+      .no {
+        align-self: center;
+        min-height: 46px;
+      }
+
+      .ticket-row {
+        font-size: 0.88rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+
+      .heart-float {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="ambient" aria-hidden="true">
+    <span class="orb orb-one"></span>
+    <span class="orb orb-two"></span>
+    <span class="orb orb-three"></span>
+    <div id="hearts"></div>
+  </div>
+
+  <main class="card">
+    <section class="content" id="askView">
+      <p class="eyebrow">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        A little question
+      </p>
+
+      <h1>
+        <span class="name" id="nameText">Gracie,</span>
+        <span class="question">will you go out with me tomorrow?</span>
+      </h1>
+
+      <p class="lede">I’ve got a little plan, and I’d love to spend the day with you.</p>
+
+      <div class="details">
+        <div class="detail">
+          <span class="detail-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+              <path d="M16 2v4M8 2v4M3 10h18"></path>
+            </svg>
+          </span>
+          <span class="label">When</span>
+          <strong id="dateText">Saturday, October 31</strong>
+        </div>
+        <div class="detail">
+          <span class="detail-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="9"></circle>
+              <path d="M12 7v5l3 2"></path>
+            </svg>
+          </span>
+          <span class="label">Time</span>
+          <strong id="timeText">6:00 PM</strong>
+        </div>
+        <div class="detail">
+          <span class="detail-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+          </span>
+          <span class="label">Plan</span>
+          <strong id="planText">Dinner &amp; something sweet</strong>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="yes" id="yesBtn" type="button">
+          Yes, I’d love to
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </button>
+        <button class="no" id="noBtn" type="button">No</button>
+      </div>
+
+      <p class="hint" id="hint" aria-live="polite">No pressure. The “No” button is just a little shy.</p>
+    </section>
+
+    <section class="content success" id="successView" tabindex="-1" hidden>
+      <div class="seal" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </div>
+
+      <p class="eyebrow">It’s official</p>
+      <h2>It’s a date, <span id="successName">Gracie</span>.</h2>
+      <p class="lede">You just made my whole week. I’m already looking forward to it.</p>
+
+      <div class="ticket">
+        <div class="ticket-row"><span>Date</span><strong id="successDate">Saturday, October 31</strong></div>
+        <div class="ticket-row"><span>Time</span><strong id="successTime">6:00 PM</strong></div>
+        <div class="ticket-row"><span>Plan</span><strong id="successPlan">Dinner &amp; something sweet</strong></div>
+      </div>
+
+      <button class="calendar" id="calendarBtn" type="button">
+        Add to calendar
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+          <path d="M16 2v4M8 2v4M3 10h18"></path>
+        </svg>
+      </button>
+
+      <p class="hint" id="successNote">Wear something you feel amazing in. I’ll handle the rest.</p>
+    </section>
+  </main>
+
+  <script>
+    const CONFIG = {
+      name: "Gracie",
+      date: "2026-10-31",
+      time: "18:00",
+      plan: "Dinner & something sweet",
+      location: "I’ll pick you up",
+      note: "Wear something you feel amazing in. I’ll handle the rest."
+    };
+
+    const askView = document.getElementById("askView");
+    const successView = document.getElementById("successView");
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const hint = document.getElementById("hint");
+    const calendarBtn = document.getElementById("calendarBtn");
+
+    const eventDate = new Date(CONFIG.date + "T12:00:00");
+    const [hours, minutes] = CONFIG.time.split(":").map(Number);
+    const dateLabel = new Intl.DateTimeFormat(undefined, {
+      weekday: "long",
+      month: "long",
+      day: "numeric"
+    }).format(eventDate);
+    const timeLabel = new Intl.DateTimeFormat(undefined, {
+      hour: "numeric",
+      minute: "2-digit"
+    }).format(new Date(2000, 0, 1, hours, minutes));
+
+    document.getElementById("nameText").textContent = CONFIG.name + ",";
+    document.getElementById("successName").textContent = CONFIG.name;
+    document.getElementById("dateText").textContent = dateLabel;
+    document.getElementById("timeText").textContent = timeLabel;
+    document.getElementById("planText").textContent = CONFIG.plan;
+    document.getElementById("successDate").textContent = dateLabel;
+    document.getElementById("successTime").textContent = timeLabel;
+    document.getElementById("successPlan").textContent = CONFIG.plan;
+    document.getElementById("successNote").textContent = CONFIG.note;
+
+    const heartMarkup = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+    const hearts = document.getElementById("hearts");
+
+    for (let i = 0; i < 18; i += 1) {
+      const heart = document.createElement("span");
+      heart.className = "heart-float";
+      heart.innerHTML = heartMarkup;
+      heart.style.left = Math.random() * 100 + "%";
+      heart.style.setProperty("--size", 10 + Math.random() * 22 + "px");
+      heart.style.setProperty("--duration", 11 + Math.random() * 14 + "s");
+      heart.style.setProperty("--delay", -Math.random() * 22 + "s");
+      heart.style.setProperty("--drift", (Math.random() - 0.5) * 140 + "px");
+      heart.style.setProperty("--opacity", 0.07 + Math.random() * 0.16);
+      hearts.appendChild(heart);
+    }
+
+    const noMessages = [
+      "Are you sure?",
+      "Nice try.",
+      "Wrong button?",
+      "This one is shy.",
+      "You can’t catch it.",
+      "Pretty please?",
+      "Nope."
+    ];
+    let noAttempts = 0;
+
+    function dodgeNo() {
+      if (noAttempts >= 7) {
+        return;
+      }
+
+      noAttempts += 1;
+
+      const angle = Math.random() * Math.PI * 2;
+      const distance = 34 + Math.random() * 56;
+      const x = Math.cos(angle) * distance;
+      const y = Math.sin(angle) * distance;
+      const scale = Math.max(0.62, 1 - noAttempts * 0.05);
+
+      noBtn.style.transform = "translate(" + x + "px, " + y + "px) scale(" + scale + ")";
+      noBtn.textContent = noMessages[Math.min(noAttempts - 1, noMessages.length - 1)];
+      hint.textContent = "Take your time. The “Yes” button is right there.";
+
+      if (noAttempts >= 7) {
+        noBtn.classList.add("gone");
+        noBtn.disabled = true;
+        noBtn.setAttribute("aria-hidden", "true");
+        hint.textContent = "The “No” button has left the chat.";
+      }
+    }
+
+    noBtn.addEventListener("click", dodgeNo);
+    noBtn.addEventListener("pointerdown", function (event) {
+      if (event.pointerType !== "mouse") {
+        event.preventDefault();
+        dodgeNo();
+      }
+    });
+    noBtn.addEventListener("mouseenter", function () {
+      if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+        dodgeNo();
+      }
+    });
+
+    function launchConfetti() {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        return;
+      }
+
+      const colors = ["#d93b70", "#f0b35b", "#ff8fa8", "#ffffff", "#7c3a5a"];
+
+      for (let i = 0; i < 64; i += 1) {
+        const piece = document.createElement("i");
+        piece.className = "confetti";
+        piece.style.left = Math.random() * 100 + "vw";
+        piece.style.background = colors[i % colors.length];
+        piece.style.width = 5 + Math.random() * 7 + "px";
+        piece.style.height = 8 + Math.random() * 11 + "px";
+        piece.style.animationDelay = Math.random() * 0.7 + "s";
+        piece.style.animationDuration = 2.5 + Math.random() * 2 + "s";
+        piece.style.setProperty("--sway", (Math.random() - 0.5) * 220 + "px");
+        piece.style.setProperty("--rotate", Math.random() * 900 - 450 + "deg");
+        document.body.appendChild(piece);
+        setTimeout(function () {
+          piece.remove();
+        }, 6000);
+      }
+    }
+
+    yesBtn.addEventListener("click", function () {
+      askView.hidden = true;
+      successView.hidden = false;
+      document.title = "It’s a date!";
+      successView.focus({ preventScroll: true });
+      launchConfetti();
+    });
+
+    function toIcsDate(date) {
+      return date.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+    }
+
+    function escapeIcs(value) {
+      return value
+        .replace(/\\/g, "\\\\")
+        .replace(/\n/g, "\\n")
+        .replace(/,/g, "\\,")
+        .replace(/;/g, "\\;");
+    }
+
+    calendarBtn.addEventListener("click", function () {
+      const start = new Date(CONFIG.date + "T00:00:00");
+      start.setHours(hours, minutes, 0, 0);
+      const end = new Date(start.getTime() + 2 * 60 * 60 * 1000);
+      const lines = [
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//Gracie Invite//EN",
+        "CALSCALE:GREGORIAN",
+        "METHOD:PUBLISH",
+        "BEGIN:VEVENT",
+        "UID:" + Date.now() + "@gracie-invite",
+        "DTSTAMP:" + toIcsDate(new Date()),
+        "DTSTART:" + toIcsDate(start),
+        "DTEND:" + toIcsDate(end),
+        "SUMMARY:" + escapeIcs("Date with " + CONFIG.name),
+        "DESCRIPTION:" + escapeIcs(CONFIG.plan + ". " + CONFIG.note),
+        "LOCATION:" + escapeIcs(CONFIG.location),
+        "END:VEVENT",
+        "END:VCALENDAR"
+      ];
+      const blob = new Blob([lines.join("\r\n")], { type: "text/calendar;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "date-with-gracie.ics";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(function () {
+        URL.revokeObjectURL(url);
+      }, 1000);
+    });
+  </script>
+</body>
+</html>
